@@ -1,5 +1,9 @@
 from tkinter import *
+from tkinter import ttk
 import pyperclip
+
+# from Modules import always_on_display
+# from Modules import add_item
 
 
 def always_on_display():
@@ -65,20 +69,30 @@ menu.add_cascade(label="Options", menu=options_menu)
 aod_var = BooleanVar()
 options_menu.add_checkbutton(label="Always On Display", variable=aod_var, command=always_on_display)
 
-recovered = Frame(window, bg='#2ab85c', width=200, height=400)
-left_inprogress = Frame(window, bg='#4681e0', width=20, height=400)
-inprogress = Frame(window, bg='#4681e0', width=300, height=400)
-right_inprogress = Frame(window, bg='#4681e0', width=20, height=400)
-recovery = Frame(window, bg='#cf4f21', width=200, height=400)
+notebook = ttk.Notebook(window)
+progress = Frame(notebook)
+doRCP = Frame(notebook)
+
+notebook.add(progress, text="In Progress")
+notebook.add(doRCP, text="do RCP")
+notebook.pack(expand=True, fill="both")
+
+recovered = Frame(progress, bg='#2ab85c', width=100, height=400)
+left_inprogress = Frame(progress, bg='#4681e0', width=10, height=400)
+inprogress = Frame(progress, bg='#4681e0', width=80, height=400)
+right_inprogress = Frame(progress, bg='#4681e0', width=10, height=400)
+recovery = Frame(progress, bg='#cf4f21', width=100, height=400)
 
 # RECOVERED
-recovered_label = Label(recovered, text="Recovered", font=("Arial", 28), bg="#2ab85c")
+recovered_label = Label(recovered, text="Recovered", font=("Arial", 14), bg="#2ab85c")
 recovered_label.pack(padx=40)
 
 listbox_recovered = Listbox(recovered,
                             bg="#f7ffde",
-                            font=("Arial", 12),
-                            width=12
+                            font=("Arial", 10),
+                            width=20,
+                            justify='center'
+
                             )
 listbox_recovered.pack()
 listbox_recovered.config(height=listbox_recovered.size())
@@ -94,13 +108,14 @@ move_left = Button(left_inprogress, text="<", command=move_left)
 move_left.pack(side='left', padx=20)
 
 # IN PROGRESS
-inprogress_label = Label(inprogress, text="In Progress", font=("Arial", 28), bg="#4681e0")
+inprogress_label = Label(inprogress, text="In Progress", font=("Arial", 14), bg="#4681e0")
 inprogress_label.pack(padx=70)
 
 listbox_inprogress = Listbox(inprogress,
                              bg="#f7ffde",
-                             font=("Constantia", 20),
-                             width=12
+                             font=("Constantia", 10),
+                             width=20,
+                             justify='center'
                              )
 
 listbox_inprogress.pack()
@@ -108,6 +123,7 @@ listbox_inprogress.config(height=listbox_inprogress.size())
 
 button_add = Button(inprogress, text="Add Item", command=add_item)
 button_add.pack(pady=10)
+listbox_inprogress.config(height=listbox_inprogress.size())
 
 button_remove = Button(inprogress, text="Remove Last", command=remove_item_inprogress)
 button_remove.pack(pady=10)
@@ -117,13 +133,14 @@ move_right = Button(right_inprogress, text=">", command=move_right)
 move_right.pack(side='right', padx=20)
 
 # RECOVERY
-recovery_label = Label(recovery, text="Recovery", font=("Arial", 28), bg="#cf4f21")
+recovery_label = Label(recovery, text="Recovery", font=("Arial", 14), bg="#cf4f21")
 recovery_label.pack(padx=40)
 
 listbox_recovery = Listbox(recovery,
                            bg="#f7ffde",
-                           font=("Arial", 12),
-                           width=12
+                           font=("Arial", 10),
+                           width=20,
+                           justify='center'
                            )
 listbox_recovery.pack()
 listbox_recovery.config(height=listbox_recovery.size())
