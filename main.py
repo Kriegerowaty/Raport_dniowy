@@ -2,15 +2,16 @@ from tkinter import *
 from tkinter import ttk
 import pyperclip
 
-from Modules import always_on_display
+
+# from Modules import always_on_display
 # from Modules import add_item
 
 
-# def always_on_display():
-#     if window.attributes("-topmost"):
-#         window.attributes("-topmost", False)
-#     else:
-#         window.attributes("-topmost", True)
+def always_on_display():
+    if window.attributes("-topmost"):
+        window.attributes("-topmost", False)
+    else:
+        window.attributes("-topmost", True)
 
 
 def add_item():
@@ -59,11 +60,14 @@ def copy_elements_from_recovery_to_clipboard():
 
 
 window = Tk()
+window.title(string='Raport dzienny')
+window.iconbitmap('intel.ico')
+window.resizable(width=False, height=False)
 
 menu = Menu(window)
 window.config(menu=menu)
+options_menu = Menu(menu, tearoff=0)
 
-options_menu = Menu(menu)
 menu.add_cascade(label="Options", menu=options_menu)
 
 aod_var = BooleanVar()
