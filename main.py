@@ -2,15 +2,15 @@ from tkinter import *
 from tkinter import ttk
 import pyperclip
 
-# from Modules import always_on_display
+from Modules import always_on_display
 # from Modules import add_item
 
 
-def always_on_display():
-    if window.attributes("-topmost"):
-        window.attributes("-topmost", False)
-    else:
-        window.attributes("-topmost", True)
+# def always_on_display():
+#     if window.attributes("-topmost"):
+#         window.attributes("-topmost", False)
+#     else:
+#         window.attributes("-topmost", True)
 
 
 def add_item():
