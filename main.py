@@ -17,17 +17,9 @@ def add_item():
     listbox_inprogress.selection_set(END)
 
 
-def remove_item_recovered():
-    listbox_recovered.delete(END)
-
-
 def remove_item_inprogress():
     listbox_inprogress.delete(END)
     listbox_inprogress.selection_set(END)
-
-
-def remove_item_recovery():
-    listbox_recovery.delete(END)
 
 
 def move_left():
@@ -37,6 +29,8 @@ def move_left():
         listbox_inprogress.delete(selection)
         listbox_recovered.insert(END, item)
         listbox_inprogress.selection_set(END)
+        update_recovered_label()
+        update_monitoring_label()
 
 
 def move_right():
@@ -46,18 +40,44 @@ def move_right():
         listbox_inprogress.delete(selection)
         listbox_recovery.insert(END, item)
         listbox_inprogress.selection_set(END)
+        update_recovery_label()
+        update_monitoring_label()
 
 
 def copy_elements_from_recovered_to_clipboard():
+    window.clipboard_clear()
     items = [listbox_recovered.get(i) for i in range(listbox_recovered.size())]
     clip_text = " ".join(items)
     window.clipboard_append(clip_text)
 
 
 def copy_elements_from_recovery_to_clipboard():
+    window.clipboard_clear()
     items = [listbox_recovery.get(i) for i in range(listbox_recovery.size())]
     clip_text = " ".join(items)
     window.clipboard_append(clip_text)
+
+
+def copy_address_to_clipboard():
+    window.clipboard_clear()
+    window.clipboard_append(
+        "https://gta-monitor.fm.intel.com/d/ti2bxWsnz/remote-recovery-scratchwork?orgId=1&refresh=3m"
+    )
+
+
+def update_recovered_label():
+    value_recovered.config(text=listbox_recovered.size())
+    value_recovered_time.config(text=listbox_recovered.size() * 12)
+
+
+def update_recovery_label():
+    value_recovery.config(text=listbox_recovery.size())
+    value_recovery_time.config(text=listbox_recovery.size() * 12)
+
+
+def update_monitoring_label():
+    value_monitoring.config(text=40-listbox_recovered.size()-listbox_recovery.size())
+    value_monitoring_time.config(text=(40-listbox_recovered.size()-listbox_recovery.size())*12)
 
 
 window = Tk()
@@ -83,9 +103,9 @@ notebook.add(doRCP, text="do RCP")
 notebook.pack(expand=True, fill="both")
 
 recovered = Frame(progress, bg='#2ab85c', width=100, height=400)
-left_inprogress = Frame(progress, bg='#4681e0', width=10, height=400)
+# left_inprogress = Frame(progress, bg='#4641e0', width=10, height=400)
 inprogress = Frame(progress, bg='#4681e0', width=80, height=400)
-right_inprogress = Frame(progress, bg='#4681e0', width=10, height=400)
+# right_inprogress = Frame(progress, bg='#4641e0', width=10, height=400)
 recovery = Frame(progress, bg='#cf4f21', width=100, height=400)
 
 # RECOVERED
@@ -102,17 +122,24 @@ listbox_recovered = Listbox(recovered,
 listbox_recovered.pack()
 listbox_recovered.config(height=listbox_recovered.size())
 
-button_remove = Button(recovered, text="Remove Last", command=remove_item_recovered)
+button_remove = Button(recovered, text="Remove Last",
+                       command=lambda: [listbox_recovered.delete(END), update_recovered_label()])
 button_remove.pack(pady=10)
 
 button_copy_all = Button(recovered, text="Copy ALL", command=copy_elements_from_recovered_to_clipboard)
 button_copy_all.pack(pady=10)
 
-# LEFT IN PROGRESS
-button_left = Button(left_inprogress, text="<", font=("Arial Black", 15), command=move_left)
-button_left.pack(side='left', padx=20)
+# # LEFT IN PROGRESS
+# button_left = Button(left_inprogress, text="<", font=("Arial Black", 15), command=move_left)
+# button_left.pack(side='left', padx=20)
 
 # IN PROGRESS
+button_left = Button(inprogress, text="<", font=("Arial Black", 15), command=move_left)
+button_left.pack(side='left', padx=10)
+
+button_right = Button(inprogress, text=">", font=("Arial Black", 15), command=move_right)
+button_right.pack(side='right', padx=10)
+
 inprogress_label = Label(inprogress, text="In Progress", font=("Arial", 14), bg="#4681e0")
 inprogress_label.pack(padx=70)
 
@@ -133,9 +160,9 @@ listbox_inprogress.config(height=listbox_inprogress.size())
 button_remove = Button(inprogress, text="Remove Last", command=remove_item_inprogress)
 button_remove.pack(pady=10)
 
-# RIGHT IN PROGRESS
-button_right = Button(right_inprogress, text=">", font=("Arial Black", 15), command=move_right)
-button_right.pack(side='right', padx=20)
+# # RIGHT IN PROGRESS
+# button_right = Button(right_inprogress, text=">", font=("Arial Black", 15), command=move_right)
+# button_right.pack(side='right', padx=20)
 
 # RECOVERY
 recovery_label = Label(recovery, text="Recovery", font=("Arial", 14), bg="#cf4f21")
@@ -150,18 +177,32 @@ listbox_recovery = Listbox(recovery,
 listbox_recovery.pack()
 listbox_recovery.config(height=listbox_recovery.size())
 
-button_remove = Button(recovery, text="Remove Last", command=remove_item_recovery)
+button_remove = Button(recovery, text="Remove Last",
+                       command=lambda: [listbox_recovery.delete(END), update_recovery_label()])
 button_remove.pack(pady=10)
 
 button_copy_all = Button(recovery, text="Copy ALL", command=copy_elements_from_recovery_to_clipboard)
 button_copy_all.pack(pady=10)
 
 # END
-recovered.pack(side='left', fill='both', expand=True)
-left_inprogress.pack(side='left', fill='both', expand=True)
-inprogress.pack(side='left', fill='both', expand=True)
-right_inprogress.pack(side='left', fill='both', expand=True)
-recovery.pack(side='right', fill='both', expand=True)
+# recovered.pack(side='left', fill='both', expand=True)
+# left_inprogress.pack(side='left', fill='both', expand=True)
+# inprogress.pack(side='left', fill='both', expand=True)
+# right_inprogress.pack(side='left', fill='both', expand=True)
+# recovery.pack(side='right', fill='both', expand=True)
+
+recovered.grid(row=0, column=0, sticky="nsew")
+# left_inprogress.grid(row=0, column=1, sticky="nsew")
+inprogress.grid(row=0, column=2, sticky="nsew")
+# right_inprogress.grid(row=0, column=3, sticky="nsew")
+recovery.grid(row=0, column=4, sticky="nsew")
+
+progress.grid_columnconfigure(0, weight=1)
+progress.grid_columnconfigure(1, weight=1)
+progress.grid_rowconfigure(0, weight=1)
+progress.grid_rowconfigure(1, weight=1)
+progress.grid_rowconfigure(2, weight=1)
+progress.grid_rowconfigure(3, weight=1)
 
 recovered_RCP = Frame(doRCP, bg='#2ab85c', width=400, height=50)
 recovery_RCP = Frame(doRCP, bg='#cf4f21', width=400, height=50)
@@ -172,18 +213,88 @@ doRCP.grid_columnconfigure(1, weight=1)
 doRCP.grid_columnconfigure(2, weight=1)
 doRCP.grid_rowconfigure(0, weight=1)
 
-title_label = Label(recovered_RCP, text="Tytuł", font=("Arial", 12), bg="red", fg="white")
-title_label.grid(row=0, column=0, padx=10, pady=10, sticky="e")
+# Recovered
 
-value1_label = Label(recovered_RCP, text="Wartość 1", font=("Arial", 10), bg="red", fg="white")
-value1_label.grid(row=0, column=1, padx=10, pady=10)
+title_recovered = Label(recovered_RCP, text="Recovered", font=("Arial", 12), bg="#2ab85c")
+title_recovered.grid(row=0, column=0, padx=10, pady=10, sticky="e")
 
-button = Button(recovered_RCP, text="Przycisk", font=("Arial", 10), bg="white", fg="red")
-button.grid(row=0, column=2, padx=10, pady=10)
+value_recovered = Label(recovered_RCP, text=listbox_recovered.size(), font=("Arial", 10), bg="#2ab85c",
+                        fg="black")
+value_recovered.grid(row=0, column=1, padx=10, pady=10)
 
-value2_label = Label(recovered_RCP, text="Wartość 2", font=("Arial", 10), bg="red", fg="white")
-value2_label.grid(row=0, column=3, padx=10, pady=10, sticky="w")
+button_comment_1 = Button(recovered_RCP,
+                          text="Comment",
+                          command=copy_elements_from_recovered_to_clipboard,
+                          font=("Arial", 10),
+                          bg="#2ab85c",
+                          fg="black",
+                          width=50)
+button_comment_1.grid(row=0, column=2, padx=10, pady=10)
 
+value_recovered_time = Label(recovered_RCP,
+                             text=listbox_recovered.size(),
+                             font=("Arial", 10),
+                             bg="#2ab85c",
+                             fg="black")
+value_recovered_time.grid(row=0, column=3, padx=10, pady=10, sticky="w")
+
+# Recovery
+
+title_recovery = Label(recovery_RCP,
+                       text=" Recovery ",
+                       font=("Arial", 12),
+                       bg="#cf4f21")
+title_recovery.grid(row=0, column=0, padx=10, pady=10, sticky="e")
+
+value_recovery = Label(recovery_RCP,
+                       text=listbox_recovery.size(),
+                       font=("Arial", 10),
+                       bg="#cf4f21",
+                       fg="black")
+value_recovery.grid(row=0, column=1, padx=10, pady=10)
+
+button_comment_2 = Button(recovery_RCP,
+                          text="Comment",
+                          command=copy_elements_from_recovery_to_clipboard,
+                          font=("Arial", 10),
+                          bg="#cf4f21",
+                          fg="black",
+                          width=50)
+button_comment_2.grid(row=0, column=2, padx=10, pady=10)
+
+value_recovery_time = Label(recovery_RCP,
+                            text=listbox_recovery.size(),
+                            font=("Arial", 10),
+                            bg="#cf4f21",
+                            fg="black")
+value_recovery_time.grid(row=0, column=3, padx=10, pady=10, sticky="w")
+
+# Monitoring
+
+title_monitoring = Label(monitoring_RCP, text="Monitoring", font=("Arial", 12), bg="#4681e0")
+title_monitoring.grid(row=0, column=0, padx=10, pady=10, sticky="e")
+
+value_monitoring = Label(monitoring_RCP, text=40 - listbox_recovery.size() - listbox_recovered.size(),
+                         font=("Arial", 10),
+                         bg="#4681e0",
+                         fg="black")
+value_monitoring.grid(row=0, column=1, padx=10, pady=10)
+
+button_comment_3 = Button(monitoring_RCP,
+                          text="Comment",
+                          command=copy_address_to_clipboard,
+                          font=("Arial", 10),
+                          bg="#4681e0",
+                          fg="black",
+                          width=50)
+button_comment_3.grid(row=0, column=2, padx=10, pady=10)
+
+value_monitoring_time = Label(monitoring_RCP,
+                              text=480,
+                              font=("Arial", 10),
+                              bg="#4681e0",
+                              fg="black")
+value_monitoring_time.grid(row=0, column=3, padx=10, pady=10, sticky="w")
 
 recovered_RCP.grid(row=1, column=0, sticky="nsew")
 recovery_RCP.grid(row=2, column=0, sticky="nsew")
