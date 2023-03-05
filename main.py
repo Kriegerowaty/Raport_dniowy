@@ -36,7 +36,6 @@ def move_left():
         listbox_inprogress.delete(selection)
         listbox_recovered.insert(END, item)
         listbox_inprogress.selection_set(END)
-        # update_label()
         update_recovered_label()
         update_monitoring_label()
 
@@ -48,7 +47,6 @@ def move_right():
         listbox_inprogress.delete(selection)
         listbox_recovery.insert(END, item)
         listbox_inprogress.selection_set(END)
-        # update_label()
         update_recovery_label()
         update_monitoring_label()
 
@@ -74,16 +72,6 @@ def copy_address_to_clipboard():
     )
 
 
-# def update_label():
-#     value.config(text=config['listbox'].size())
-#     value_time.config(text=config['listbox'].size() * 12)
-
-# def update_value(event):
-#     widget = event.widget
-#     index = rcp_config.index(next((x for x in rcp_config if x['listbox'] == widget), None))
-#     value.config(text=widget.size() if widget else 40 if index != 2 else 480)
-
-
 def update_recovered_label():
     value_recovered.config(text=listbox_recovered.size())
     value_recovered_time.config(text=listbox_recovered.size() * 12)
@@ -93,7 +81,6 @@ def update_recovery_label():
     value_recovery.config(text=listbox_recovery.size())
     value_recovery_time.config(text=listbox_recovery.size() * 12)
 
-
 def update_monitoring_label():
     value_monitoring.config(text=40 - listbox_recovered.size() - listbox_recovery.size())
     value_monitoring_time.config(text=(40 - listbox_recovered.size() - listbox_recovery.size()) * 12)
@@ -101,7 +88,6 @@ def update_monitoring_label():
 
 window = Tk()
 window.title(string='Raport dzienny')
-# window.iconbitmap('intel.ico')
 window.resizable(width=False, height=False)
 
 menu = Menu(window)
@@ -113,7 +99,6 @@ menu.add_cascade(label="Opcje", menu=options_menu)
 aod_var = BooleanVar()
 r_window = BooleanVar()
 options_menu.add_checkbutton(label="Always On Display", variable=aod_var, command=always_on_display)
-# options_menu.add_checkbutton(label="Rozszerzanie okna", variable=r_window, command=resize_window)
 
 notebook = ttk.Notebook(window)
 progress = Frame(notebook)
@@ -220,10 +205,6 @@ recovered_RCP = Frame(doRCP, bg='#2ab85c', width=400, height=50)
 recovery_RCP = Frame(doRCP, bg='#cf4f21', width=400, height=50)
 monitoring_RCP = Frame(doRCP, bg='#4681e0', width=400, height=50)
 
-# doRCP.grid_columnconfigure(0, weight=1)
-# doRCP.grid_columnconfigure(1, weight=1)
-# doRCP.grid_columnconfigure(2, weight=1)
-
 for i in range(3):
     doRCP.grid_columnconfigure(i, weight=1)
 
@@ -322,37 +303,5 @@ value_monitoring_time.grid(row=0, column=3, padx=10, pady=10, sticky="w")
 recovered_RCP.grid(row=0, column=1, sticky="ew")
 recovery_RCP.grid(row=1, column=1, sticky="ew")
 monitoring_RCP.grid(row=2, column=1, sticky="ew")
-
-#
-# # Lista z konfiguracjami do utworzenia ramek
-# rcp_config = [
-#     {'name': 'Recovered', 'bg': '#2ab85c', 'listbox': listbox_recovered,
-#      'command': copy_elements_from_recovered_to_clipboard},
-#     {'name': 'Recovery', 'bg': '#cf4f21', 'listbox': listbox_recovery,
-#      'command': copy_elements_from_recovery_to_clipboard},
-#     {'name': 'Monitoring', 'bg': '#4681e0', 'listbox': None, 'command': copy_address_to_clipboard}
-# ]
-#
-# # Tworzenie ramek z wykorzystaniem pętli for
-# frames = []
-# for i, config in enumerate(rcp_config):
-#     frame = Frame(doRCP, bg=config['bg'], width=400, height=50)
-#     frame.grid(row=i, column=1, sticky="ew")
-#     frames.append(frame)
-#     title = Label(frame, text=config['name'], font=("Arial", 12), bg=config['bg'])
-#     title.grid(row=0, column=0, padx=10, pady=10, sticky="e")
-#     value = Label(frame, text=config['listbox'].size() if config['listbox'] else 40, font=("Arial", 10),
-#                   bg=config['bg'], fg="black")
-#     value.grid(row=0, column=1, padx=10, pady=10)
-#     if config['listbox']:
-#         config['listbox'].bind("<Configure>", update_value)
-#     button_comment = Button(frame, text="Podniesione" if i == 0 else "Posłane w cholere" if i == 1 else "Link z D",
-#                             command=config['command'], font=("Arial", 10), bg=config['bg'], fg="black",
-#                             activebackground=config['bg'], activeforeground="black", takefocus=False, width=30)
-#     button_comment.grid(row=0, column=2, padx=10, pady=10)
-#     value_time = Label(frame, text=config['listbox'].size() if config['listbox'] else 480, font=("Arial", 10),
-#                        bg=config['bg'], fg="black")
-#     value_time.grid(row=0, column=3, padx=10, pady=10, sticky="w")
-#     doRCP.grid_columnconfigure(i, weight=1)
 
 window.mainloop()
