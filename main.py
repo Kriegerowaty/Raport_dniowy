@@ -1,6 +1,10 @@
+import time
 from tkinter import *
-from tkinter import ttk
+from tkinter import ttk, messagebox
 import pyperclip
+
+listbox_recovered = None
+listbox_recovery = None
 
 
 def always_on_display():
@@ -15,6 +19,40 @@ def resize_window():
         window.resizable(width=True, height=True)
     else:
         window.resizable(width=False, height=False)
+
+
+def write_data_to_file(filename):
+    with open(filename, 'w') as f:
+        f.write(f"RECOVERED:\n")
+        f.write(f"Count {listbox_recovered.size()}\n")
+        for every in range(listbox_recovered.size()):
+            f.write(f"{listbox_recovered.get(every)} \n")
+        f.write(f"Time {listbox_recovered.size() * 12}\n")
+
+        f.write(f"\nRECOVERY:\n")
+        f.write(f"Count {listbox_recovery.size()}\n")
+        for every in range(listbox_recovery.size()):
+            f.write(f"{listbox_recovery.get(every)} \n")
+        f.write(f"Time {listbox_recovery.size() * 12}\n")
+
+        f.write(f"\nMONITORING:\n")
+        f.write(f"Count {40 - listbox_recovered.size() - listbox_recovery.size()}\n")
+        f.write(f"https://gta-monitor.fm.intel.com/d/ti2bxWsnz/remote-recovery-scratchwork?orgId=1&refresh=3m\n")
+        f.write(f"Count {(40 - listbox_recovered.size() - listbox_recovery.size()) * 12}\n")
+
+
+def save_every_20_mins():
+    while True:
+        write_data_to_file('data.txt')
+        time.sleep(20 * 60)  # Wait for 20 minutes before running again
+
+
+def close_window():
+    answer = messagebox.askquestion("Uwaga",
+                                    "Czy na pewno chcesz zamknąć okno?\nDane zostaną zapisane do pliku dane.txt")
+    if answer == 'yes':
+        write_data_to_file('data.txt')
+        window.destroy()
 
 
 def add_item():
@@ -80,6 +118,7 @@ def update_recovered_label():
 def update_recovery_label():
     value_recovery.config(text=listbox_recovery.size())
     value_recovery_time.config(text=listbox_recovery.size() * 12)
+
 
 def update_monitoring_label():
     value_monitoring.config(text=40 - listbox_recovered.size() - listbox_recovery.size())
@@ -304,4 +343,5 @@ recovered_RCP.grid(row=0, column=1, sticky="ew")
 recovery_RCP.grid(row=1, column=1, sticky="ew")
 monitoring_RCP.grid(row=2, column=1, sticky="ew")
 
+window.protocol("WM_DELETE_WINDOW", close_window)
 window.mainloop()
