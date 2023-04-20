@@ -70,18 +70,8 @@ def copy_elements_from_recovery_to_clipboard():
 def copy_address_to_clipboard():
     window.clipboard_clear()
     window.clipboard_append(
-        "https://gta-monitor.fm.intel.com/d/ti2bxWsnz/remote-recovery-scratchwork?orgId=1&refresh=3m"
+        "xyz"
     )
-
-
-# def update_label():
-#     value.config(text=config['listbox'].size())
-#     value_time.config(text=config['listbox'].size() * 12)
-
-# def update_value(event):
-#     widget = event.widget
-#     index = rcp_config.index(next((x for x in rcp_config if x['listbox'] == widget), None))
-#     value.config(text=widget.size() if widget else 40 if index != 2 else 480)
 
 
 def update_recovered_label():
@@ -101,7 +91,6 @@ def update_monitoring_label():
 
 window = Tk()
 window.title(string='Raport dzienny')
-# window.iconbitmap('intel.ico')
 window.resizable(width=False, height=False)
 
 menu = Menu(window)
@@ -271,7 +260,7 @@ value_recovery = Label(recovery_RCP,
 value_recovery.grid(row=0, column=1, padx=10, pady=10)
 
 button_comment_2 = Button(recovery_RCP,
-                          text="Posłane w cholere",
+                          text="Nienaprawione",
                           command=copy_elements_from_recovery_to_clipboard,
                           font=("Arial", 10),
                           bg="#cf4f21",
@@ -301,7 +290,7 @@ value_monitoring = Label(monitoring_RCP, text=40 - listbox_recovery.size() - lis
 value_monitoring.grid(row=0, column=1, padx=10, pady=10)
 
 button_comment_3 = Button(monitoring_RCP,
-                          text="Link z D",
+                          text="Link",
                           command=copy_address_to_clipboard,
                           font=("Arial", 10),
                           bg="#4681e0",
@@ -323,36 +312,5 @@ recovered_RCP.grid(row=0, column=1, sticky="ew")
 recovery_RCP.grid(row=1, column=1, sticky="ew")
 monitoring_RCP.grid(row=2, column=1, sticky="ew")
 
-#
-# # Lista z konfiguracjami do utworzenia ramek
-# rcp_config = [
-#     {'name': 'Recovered', 'bg': '#2ab85c', 'listbox': listbox_recovered,
-#      'command': copy_elements_from_recovered_to_clipboard},
-#     {'name': 'Recovery', 'bg': '#cf4f21', 'listbox': listbox_recovery,
-#      'command': copy_elements_from_recovery_to_clipboard},
-#     {'name': 'Monitoring', 'bg': '#4681e0', 'listbox': None, 'command': copy_address_to_clipboard}
-# ]
-#
-# # Tworzenie ramek z wykorzystaniem pętli for
-# frames = []
-# for i, config in enumerate(rcp_config):
-#     frame = Frame(doRCP, bg=config['bg'], width=400, height=50)
-#     frame.grid(row=i, column=1, sticky="ew")
-#     frames.append(frame)
-#     title = Label(frame, text=config['name'], font=("Arial", 12), bg=config['bg'])
-#     title.grid(row=0, column=0, padx=10, pady=10, sticky="e")
-#     value = Label(frame, text=config['listbox'].size() if config['listbox'] else 40, font=("Arial", 10),
-#                   bg=config['bg'], fg="black")
-#     value.grid(row=0, column=1, padx=10, pady=10)
-#     if config['listbox']:
-#         config['listbox'].bind("<Configure>", update_value)
-#     button_comment = Button(frame, text="Podniesione" if i == 0 else "Posłane w cholere" if i == 1 else "Link z D",
-#                             command=config['command'], font=("Arial", 10), bg=config['bg'], fg="black",
-#                             activebackground=config['bg'], activeforeground="black", takefocus=False, width=30)
-#     button_comment.grid(row=0, column=2, padx=10, pady=10)
-#     value_time = Label(frame, text=config['listbox'].size() if config['listbox'] else 480, font=("Arial", 10),
-#                        bg=config['bg'], fg="black")
-#     value_time.grid(row=0, column=3, padx=10, pady=10, sticky="w")
-#     doRCP.grid_columnconfigure(i, weight=1)
 
 window.mainloop()
